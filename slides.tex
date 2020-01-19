@@ -1,0 +1,101 @@
+\documentclass[mathserif,serif]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usecolortheme{beaver}
+
+
+\title{Traditional Approaches to Machine Learning}
+\subtitle{A brief overview of different classic Machine Learning Algorithms}
+
+\author{Tilman Roeder}
+\date{\today}
+
+
+\begin{document}
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{frame}
+  \frametitle{Today}
+  \tableofcontents
+\end{frame}
+
+\section{Naive Bayes Classifiers}
+\frame{\sectionpage}
+
+\begin{frame}
+  \frametitle{(Super Brief) Primer in Bayesian Statistic}
+
+  Define conditional probabilities
+  \begin{equation}
+    P(X|Y) P(Y) = P(X \cap Y)
+  \end{equation}
+  \pause
+
+  Which immediately gives Bayes Theorem
+  \begin{equation}
+    P(X|Y) = \frac{P(Y|X) P(X)}{P(Y)} = \frac{P(Y|X) P(X)}{\sum_X P(Y|X) P(X)}
+  \end{equation}
+  \pause
+
+  In Bayesian Statistics probabilities quantify our `degree of believe'.
+
+  Bayes Theorem allows us to `update' our believes (prior) based on new
+  evidence (data) to obtain a new believe (posterior).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Naive Bayes Classifiers}
+  \begin{itemize}
+    \item<1-> Given a set of possible labels $\{X_i\}$ and an observation $Y \in \{Y_i\}$
+    \item<2-> We seek $P(X|Y)$
+    \item<3-> Apply Bayes Theorem to compute posterior probability
+    \item<4-> Conditional probabilities are based on simple (naive) heuristics
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Spam Filtering}
+  Given a message $M$ consisting of words $(W_1, W_2, \dots, W_n)$, and assuming words occurrences
+  are independent we have:
+  \begin{equation}
+    P(S|W) = \frac{P(W|S)P(S)}{P(W)} = \frac{P(S)\prod_i P(W_i|S)}{\sum_{s \in \{S, \neg S\}} P(s) \prod_i P(W_i|s)},
+  \end{equation}
+  where $P(S)$ is the probability of the message being spam.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Spam Filtering}
+  Note that the previous expression is prone to numeric instability. We can fix this by computing
+  the probabilities in $log$ space:
+  \begin{equation}
+  \begin{split}
+    \ln\left( \frac{1}{P(S|W)} - 1 \right) = \sum_i \ln\left( P(W_i|\neg S) \right) - \ln\left( P(W_i|S) \right) \\
+      + \ln(P(\neg S)) - \ln(P(S))
+  \end{split}
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Spam Filtering}
+  What are $P(W|S)$, $P(W)$, and $P(S)$? \pause This is where we invent heuristics:
+  \begin{itemize}
+    \item $P(W|S) = $ fraction of spam words that are $W$
+    \item $P(W|\neg S) = $ fraction of ham words that are $W$
+    \item $P(S) = $ fraction of spam received in total (or unbiased: $\frac12$)
+  \end{itemize}
+  \pause
+  These are very cheap to compute, and one of the oldest spam filters. Bayesian Classifiers are not
+  as good as more advanced techniques. But for applications where speed and simplicity are important,
+  they can be very competitive.
+\end{frame}
+
+\section{Support Vector Machines}
+\frame{\sectionpage}
+
+\section{Decision Trees}
+\frame{\sectionpage}
+
+\end{document}

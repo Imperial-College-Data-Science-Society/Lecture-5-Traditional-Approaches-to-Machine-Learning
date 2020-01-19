@@ -1,0 +1,17 @@
+# Ignore LaTeX output
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.nav
+*.snm
+*.toc
+
+# Jupyter stuff
+.ipynb_checkpoints
+__pycache__
+
+# Ignore system files
+.DS_Store
