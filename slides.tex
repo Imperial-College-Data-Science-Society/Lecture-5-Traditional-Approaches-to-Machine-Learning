@@ -225,6 +225,25 @@
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{The Kernel Trick (Note)}
+
+  Keen observers might have noticed the following problem: how do we compute inner products with
+  $\vec\omega$, without using $\phi(\vec x)$ directly?
+
+  \pause
+  The answer is as follows: assume $\vec\omega$ lies in the span of $\phi(\vec x_i)$, then we may
+  write
+  \begin{equation}
+    \vec\omega \cdot \phi(\vec x) = \sum_i c_i y_i \phi(\vec x_i) \cdot \phi(\vec x),
+  \end{equation}
+  with $c_i \in \mathbb{R}$ and where $y_i$ is included for mathematical convenience.
+
+  \pause
+  Note that only the $c_i$ of the support vectors will be non-zero, so that the final model
+  remains small.
+\end{frame}
+
 \section{Decision Trees}
 \frame{\sectionpage}
 

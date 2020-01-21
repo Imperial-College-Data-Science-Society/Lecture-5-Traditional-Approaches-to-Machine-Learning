@@ -1,6 +1,7 @@
 # Super simple data loader
 
 from zipfile import ZipFile
+import numpy as np
 import re
 
 class Email:
@@ -9,7 +10,7 @@ class Email:
         self.words = re.findall(r'[a-zA-Z]{5,}', text)
         self.spam = True if label == "spam" else False
 
-# Load emails
+# Load emails (Bayes)
 ham  = []
 spam = []
 with ZipFile("./spam_ham_dataset.csv.zip") as archive:
@@ -21,3 +22,12 @@ with ZipFile("./spam_ham_dataset.csv.zip") as archive:
                 spam.append(email)
             else:
                 ham.append(email)
+
+# Generate SVM data
+points = np.random.rand(500, 2) * 4 - 2
+labels = np.zeros(500)
+for (idx, p) in enumerate(points):
+    if p[0]**2 + p[1]**2 <= 1:
+        labels[idx] = +1
+    else:
+        labels[idx] = -1
