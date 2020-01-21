@@ -1,7 +1,9 @@
 \documentclass[mathserif,serif]{beamer}
 
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 \usecolortheme{beaver}
+\graphicspath{{./images/}}
 
 
 \title{Traditional Approaches to Machine Learning}
@@ -94,6 +96,134 @@
 
 \section{Support Vector Machines}
 \frame{\sectionpage}
+
+\begin{frame}
+  \frametitle{Linear Separable Data}
+  \begin{columns}
+    \column{0.4\linewidth}
+    \centering
+    \includegraphics[width=5cm]{svm}
+    \textit{\tiny(graphic by ZackWeinberg)}
+
+    \column{0.6\linewidth}
+    \begin{itemize}
+      \item SVMs classify data with binary labels
+      \item Classification is achieved by drawing a hyperplane between the data
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Support Vector Machine Classifier}
+  A hyperplane $P$ in $\mathbb{R}^n$ is defined by
+  \begin{equation}
+    \vec{\omega} \cdot \vec{x} - b = 0,
+  \end{equation}
+  with $\vec{\omega}, \vec{x} \in \mathbb{R}^n$, $b \in \mathbb{R}$ and $\cdot$ denotes the inner product.
+
+  \pause
+  We can now define the Support Vector Machine classifier:
+  \begin{equation}
+    \tilde{y}(\vec{x}) = \operatorname{sign}(\vec{\omega} \cdot \vec{x} - b).
+  \end{equation}
+
+  \pause
+  Note that the classifier has $n+1$ free parameters.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hard Margin SVM}
+  Consider a set of labeled points $\left\{ (\vec x_i, y_i) \right\}$, where
+  $y_i \in \{-1, +1\}$.
+
+  \pause
+  Define two hyperplanes equidistant from $P$: $P_1$, $P_{-1}$ as
+  \begin{equation}
+    \vec{\omega} \cdot \vec{x} - b = \pm 1.
+  \end{equation}
+  Note that $P_{\pm1}$ have a distance of $\frac{2}{|\vec{\omega}|}$.
+
+  \pause
+  To find the SVM classifier we minimize $|\vec{\omega}|$, subject to the condition that
+  $P$ correctly classifies the data:
+  \begin{equation}
+    y_i(\vec\omega \cdot \vec x_i - b) \geq 1
+  \end{equation}
+
+  \pause
+  Notice that the parameters $\vec \omega, b$ are completely determined by those
+  $\vec x_i$ which are closest to $P$. These are called the `support vectors'.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Soft Margin SVM}
+  What happens when the data is not linearly separable?
+
+  \pause
+  We can use a soft-margin classifier instead. This is done by modifying the
+  loss function:
+  \begin{equation}
+    L = \frac 1n \sum_i \max(0, 1 - y_i(\vec\omega \cdot \vec x_i - b)) + \lambda |\vec\omega|
+  \end{equation}
+
+  \pause
+  We now find $\vec\omega, b$ by minimizing $L$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Kernel Trick}
+  \begin{columns}
+    \column{0.4\linewidth}
+    \centering
+    \includegraphics[width=5cm]{not_linear}
+    \textit{\tiny(graphic by Shiyu Ji)}
+
+    \column{0.6\linewidth}
+    If the data is not linearly separable, a soft-margin SVM performs poorly.
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Kernel Trick}
+  \begin{columns}
+    \column{0.4\linewidth}
+    \centering
+    \includegraphics[width=5cm]{kernel_trick}
+    \textit{\tiny(graphic by Shiyu Ji)}
+
+    \column{0.6\linewidth}
+    However, there may be a map $K: \mathbb{R}^n \to \mathbb{R}^m$ to a higher dimensional space
+    $\mathbb{R}^{m>n}$, in which the data is linearly separable.
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Kernel Trick}
+  Consider the case where (like in the picture) class $1$ lies inside the unit circle in $\mathbb{R}^2$.
+
+  \pause
+  Take the map
+  \begin{equation}
+    K(\vec x) = (x_1, x_2, x_1^2+x_2^2).
+  \end{equation}
+
+  \pause
+  In this new space, the data is separated by the plane
+  \begin{equation}
+    \hat z \cdot \vec x - 1 = 0.
+  \end{equation}
+
+  \pause
+  We further define $k: \mathbb{R}^2 \to \mathbb{R}$ such that
+  \begin{equation}
+    k(\vec x, \vec y) = K(\vec x) \cdot K(\vec y) = \vec x \cdot \vec y + |\vec x|^2 |\vec y|^2.
+  \end{equation}
+
+  \pause
+  $k$ is called the `Kernel' and allows us to easily compute inner products, without having to
+  explicitly map $\vec x_i$ to the higher dimensional space.
+
+\end{frame}
 
 \section{Decision Trees}
 \frame{\sectionpage}
