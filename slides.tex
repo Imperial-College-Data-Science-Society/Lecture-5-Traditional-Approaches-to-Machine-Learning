@@ -2,6 +2,8 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
 \usecolortheme{beaver}
 \graphicspath{{./images/}}
 
@@ -119,7 +121,7 @@
   \begin{equation}
     \vec{\omega} \cdot \vec{x} - b = 0,
   \end{equation}
-  with $\vec{\omega}, \vec{x} \in \mathbb{R}^n$, $b \in \mathbb{R}$ and $\cdot$ denotes the inner product.
+  with $\vec{\omega}, \vec{x} \in \mathbb{R}^n$, $b \in \mathbb{R}$ and where $\cdot$ denotes an inner product.
 
   \pause
   We can now define the Support Vector Machine classifier:
@@ -238,13 +240,78 @@
     \vec\omega \cdot \phi(\vec x) = \sum_i c_i y_i \phi(\vec x_i) \cdot \phi(\vec x),
   \end{equation}
   with $c_i \in \mathbb{R}$ and where $y_i$ is included for mathematical convenience.
-
-  \pause
-  Note that only the $c_i$ of the support vectors will be non-zero, so that the final model
-  remains small.
 \end{frame}
 
 \section{Decision Trees}
 \frame{\sectionpage}
+
+\begin{frame}
+  \frametitle{What is a Decision Tree}
+
+  A decision tree is a \textbf{directed}, \textbf{acyclic} \textbf{graph}. The nodes in the graph
+  represent decision points and all paths lead to a classification $C_i \in C$.
+  \begin{center}
+  \begin{tikzpicture}[
+      > = stealth, % arrow head style
+      shorten > = 1pt, % don't touch arrow head to node
+      auto,
+      node distance = 1.5cm, % distance between nodes
+      semithick % line style
+    ]
+    \tikzset{vertex/.style = {shape=rectangle,draw,minimum size=1.5em}}
+    \tikzset{edge/.style = {->,> = latex'}}
+
+        \node[vertex] (root) {rule};
+        \node[vertex] (v1) [below left of=root] {rule};
+        \node[vertex] (v2) [below right of=root] {rule};
+        \node[vertex] (end1) [below left of=v1] {$C_1$};
+        \node[vertex] (end2) [below right of=v1] {$C_2$};
+        \node[vertex] (end3) [below right of=v2] {$C_3$};
+
+        \path[->] (root) edge node {} (v1);
+        \path[->] (root) edge node {} (v2);
+        \path[->] (v1) edge node {} (end1);
+        \path[->] (v1) edge node {} (end2);
+        \path[->] (v2) edge node {} (end2);
+        \path[->] (v2) edge node {} (end3);
+  \end{tikzpicture}
+  \end{center}
+
+  \pause
+  The decision nodes use (typically simple) rules to direct the data flow. The end nodes
+  represent a classification.
+
+  \pause
+  Note that the decision nodes can use simple rules (like $\vec x_i > \vec y_i$ for some $i$), or
+  more complex rules (e.g. a SVM or Bayes Filter).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Building a Decision Tree}
+  How do we construct such a tree?
+
+  \pause
+  There are multiple options:
+  \begin{itemize}
+    \pause\item Write the rules by hand
+    \pause\item Select a set of parameterized rules, and construct tree by choosing best separation
+      achieved at each node
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Random Forrest}
+  We can build models with better performance by construction multiple trees:
+  \begin{itemize}
+    \pause\item Split the dataset into $N$ disjoint subsets
+    \pause\item Build a decision tree from each subset
+    \pause\item The trees can then be used to generate separate predictions for new data
+    \pause\item These predictions are then combined (e.g. by majority vote)
+  \end{itemize}
+
+  \pause
+  In practice, random forests are good and fast predictors, that are competitive with neural networks
+  (depending on specific task).
+\end{frame}
 
 \end{document}
